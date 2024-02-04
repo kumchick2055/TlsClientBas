@@ -387,6 +387,12 @@
                     "isasync": false,
                     "waitinfinite": false,
                     "workfunction": "GetStatus"
+                },
+                {
+                    "name": "LoadCookies",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "LoadCookies"
                 }
 			]
 		}
