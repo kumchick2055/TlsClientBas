@@ -19,7 +19,7 @@
 #include <mutex>
 #include <fstream>
 #include <chrono>
-#include "vendor/nlohmann/json.hpp"
+#include "utils.h"
 
 
 // Data
@@ -405,20 +405,11 @@ bool addHttpData(char* requestData, char* responseData) {
         return false;
     }
 
-    std::string requestUrl = "<No Url>";
-    std::string requestMethod = "<No Method>";
-    std::string requestBody = "<No Body>";
-    std::string requestHeaders = "<No Headers>";
+    std::string requestUrl = getValueOrDefault(requestDoc, "requestUrl", "<No Url>");
+    std::string requestMethod = getValueOrDefault(requestDoc, "requestMethod", "<No Method>");
+    std::string requestBody = getValueOrDefault(requestDoc, "requestBody", "<No Body>");
+    std::string requestHeaders = getValueOrDefault(requestDoc, "requestHeaders", "<No Headers>");
 
-    if (requestDoc.find("requestUrl") != requestDoc.end()) {
-        requestUrl = requestDoc["requestUrl"].get<std::string>();
-    }
-    if (requestDoc.find("requestMethod") != requestDoc.end()) {
-        requestMethod = requestDoc["requestMethod"].get<std::string>();
-    }
-    if (requestDoc.find("requestBody") != requestDoc.end()) {
-        requestBody = requestDoc["requestBody"].get<std::string>();
-    }
     if (requestDoc.find("headers") != requestDoc.end()) {
         const nlohmann::json& headers = requestDoc["headers"];
         requestHeaders = "";
@@ -436,24 +427,12 @@ bool addHttpData(char* requestData, char* responseData) {
         return false;
     }
 
-    std::string responseUrl = "<No Url>";
-    std::string responseBody = "<No Body>";
-    std::string responseStatus = "<No Status>";
+    std::string responseUrl = getValueOrDefault(responseDoc, "target", "<No Url>");
+    std::string responseBody = getValueOrDefault(responseDoc, "body", "<No Body>");
+    std::string responseStatus = getValueOrDefault(responseDoc, "status", "<No Status>");
+    std::string responseProtocol = getValueOrDefault(responseDoc, "usedProtocol", "<No Protocol>");
     std::string responseHeaders = "<No Headers>";
-    std::string responseProtocol = "<No Protocol>";
 
-    if (responseDoc.find("target") != responseDoc.end()) {
-        responseUrl = responseDoc["target"].get<std::string>();
-    }
-    if (responseDoc.find("body") != responseDoc.end()) {
-        responseBody = responseDoc["body"].get<std::string>();
-    }
-    if (responseDoc.find("status") != responseDoc.end()) {
-        responseStatus = std::to_string(responseDoc["status"].get<int>());
-    }
-    if (responseDoc.find("usedProtocol") != responseDoc.end()) {
-        responseProtocol = responseDoc["usedProtocol"].get<std::string>();
-    }
     if (responseDoc.find("headers") != responseDoc.end()) {
         const nlohmann::json& headers = responseDoc["headers"];
         responseHeaders = "";

@@ -112,3 +112,10 @@ long long currentTime() {
 
 	return secondsUTC;
 }
+
+std::string getValueOrDefault(const nlohmann::json& doc, const std::string& key, const std::string& defaultValue) {
+	if (doc.find(key) != doc.end()) {
+		return doc[key].get<std::string>();
+	}
+	return defaultValue;
+}
