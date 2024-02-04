@@ -1,7 +1,11 @@
 #include "cookie.h"
+#include <Windows.h>
 
 Cookie::Cookie(const std::string& cookieData) {
     if (!isValidSetCookie(cookieData)) {
+        return;
+    }
+    if (cookieData.size() == 0) {
         return;
     }
     auto tokens = splitString(cookieData, "; ");
@@ -64,14 +68,16 @@ bool CookieJar::isCookieForDomain(const Cookie& cookie, const std::string& url) 
         std::string currentUrl = splitString(currentUrlWihoutProtocol, "/").at(0);
 
         
-        if (currentUrlWihoutProtocol.back() != '/') {
-            currentUrlWihoutProtocol += "/";
+        if (cookie.path != "/") {
+            if (currentUrlWihoutProtocol.find(cookie.path) == std::string::npos) {
+                return false;
+            }
         }
 
         int temp1 = countSubstring(currentUrl, ".");
         int temp2 = countSubstring(cookie.domain, ".");
 
-        if (domain == getDomain(url) && temp1 == temp2 && currentUrlWihoutProtocol.find(cookie.path) != std::string::npos) {
+        if (domain == getDomain(url) && temp1 == temp2) {
             return url.find(cookie.domain) != std::string::npos;
         }
     }
@@ -183,6 +189,10 @@ std::string CookieJar::getDomain(const std::string& currentUrl) {
 
     if (resultString.find("://") != std::string::npos) {
         resultString = splitString(resultString, "://").at(1);
+    }
+
+    if (resultString.find("/") != std::string::npos) {
+        resultString = splitString(resultString, "/").at(0);
     }
 
     return resultString;

@@ -399,6 +399,10 @@ bool stopGui() {
 }
 
 bool addHttpData(char* requestData, char* responseData) {
+    if (!isRunning) {
+        return false;
+    }
+
     nlohmann::json requestDoc = nlohmann::json::parse(requestData);
 
     if (!requestDoc.is_object()) {
@@ -429,7 +433,7 @@ bool addHttpData(char* requestData, char* responseData) {
 
     std::string responseUrl = getValueOrDefault(responseDoc, "target", "<No Url>");
     std::string responseBody = getValueOrDefault(responseDoc, "body", "<No Body>");
-    std::string responseStatus = getValueOrDefault(responseDoc, "status", "<No Status>");
+    std::string responseStatus = std::to_string(responseDoc["status"].get<int>());
     std::string responseProtocol = getValueOrDefault(responseDoc, "usedProtocol", "<No Protocol>");
     std::string responseHeaders = "<No Headers>";
 

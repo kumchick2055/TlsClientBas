@@ -190,23 +190,10 @@ extern "C" {
 		nlohmann::json inputJson = nlohmann::json::parse(InputJson);
 
 		if (inputJson.is_object()) {
-			std::string proxyText;
-			std::string proxyType;
-			std::string proxyLogin;
-			std::string proxyPassword;
-
-			if (inputJson.find("proxyText") != inputJson.end()) {
-				proxyText = inputJson["proxyText"].get<std::string>();
-			}
-			if (inputJson.find("proxyType") != inputJson.end()) {
-				proxyType = inputJson["proxyType"].get<std::string>();
-			}
-			if (inputJson.find("proxyLogin") != inputJson.end()) {
-				proxyLogin = inputJson["proxyLogin"].get<std::string>();
-			}
-			if (inputJson.find("proxyPassword") != inputJson.end()) {
-				proxyPassword = inputJson["proxyPassword"].get<std::string>();
-			}
+			std::string proxyText = getValueOrDefault(inputJson, "proxyText", "");
+			std::string proxyType = getValueOrDefault(inputJson, "proxyType", "");
+			std::string proxyLogin = getValueOrDefault(inputJson, "proxyLogin", "");
+			std::string proxyPassword = getValueOrDefault(inputJson, "proxyPassword", "");
 
 			if (proxyText.empty() || proxyType.empty()) {
 				return;
@@ -230,6 +217,41 @@ extern "C" {
 
 		char* ResMemory = AllocateSpace(static_cast<int>(strlen(tmp)), AllocateData);
 		memcpy(ResMemory, tmp, strlen(tmp));
+	}
+
+	void LoadCookies(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
+		HttpClient* client = static_cast<HttpClient*>(ThreadData);
+
+		nlohmann::json cookiesJson = nlohmann::json::parse(InputJson);
+
+		//client->jar.clear();
+
+		if (cookiesJson.find("cookies") != cookiesJson.end()) {
+			if (cookiesJson["cookies"].is_array()) {
+				for (const auto& cookieData : cookiesJson["cookies"]) {
+					Cookie cookie("");
+
+					if (cookieData.find("domain") == cookieData.end() ||
+						cookieData.find("expires") == cookieData.end() ||
+						cookieData.find("httpOnly") == cookieData.end() ||
+						cookieData.find("name") == cookieData.end() ||
+						cookieData.find("path") == cookieData.end() ||
+						cookieData.find("secure") == cookieData.end()) {
+						continue;
+					}
+
+					cookie.domain = cookieData["domain"].get<std::string>();
+					cookie.expires = cookieData["expires"].get<long long>();
+					cookie.httpOnly = cookieData["httpOnly"].get<bool>();
+					cookie.name = cookieData["name"].get<std::string>();
+					cookie.path = cookieData["path"].get<std::string>();
+					cookie.secure = cookieData["secure"].get<bool>();
+					cookie.value = cookieData["value"].get<std::string>();
+
+					client->jar.addCookie(cookie);
+				}
+			}
+		}
 	}
 
 	void Request(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
