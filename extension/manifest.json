@@ -1,0 +1,394 @@
+{
+	"actions": [
+		{
+			"code": [
+				{
+					"file": "tlsclient_OpenSniffer_code.js",
+					"name": "tlsclient_OpenSniffer_code"
+				}
+			],
+			"description": {
+				"en": "Show Sniffer",
+				"ru": "Показать Сниффер"
+			},
+			"interface": "tlsclient_OpenSniffer_interface.js",
+			"is_element": false,
+			"name": "tlsclient_OpenSniffer",
+			"select": "tlsclient_OpenSniffer_select.js",
+			"template": ""
+		},
+		{
+			"code": [
+				{
+					"file": "tlsclient_Reset_code.js",
+					"name": "tlsclient_Reset_code"
+				}
+			],
+			"description": {
+				"en": "Tls Client Reset",
+				"ru": "Tls Client Сброс"
+			},
+			"interface": "tlsclient_Reset_interface.js",
+			"is_element": false,
+			"name": "tlsclient_Reset",
+			"select": "tlsclient_Reset_select.js",
+			"template": ""
+		},
+        {
+			"code": [
+				{
+					"file": "tlsclient_Get_code.js",
+					"name": "tlsclient_Get_code"
+				}
+			],
+			"description": {
+				"en": "GET Request",
+				"ru": "GET Запрос"
+			},
+			"interface": "tlsclient_Get_interface.js",
+			"is_element": false,
+			"name": "tlsclient_Get",
+			"select": "tlsclient_Get_select.js",
+			"template": "{{Value}}"
+		},
+        {
+			"code": [
+				{
+					"file": "tlsclient_Post_code.js",
+					"name": "tlsclient_Post_code"
+				}
+			],
+			"description": {
+				"en": "POST Request",
+				"ru": "POST Запрос"
+			},
+			"interface": "tlsclient_Post_interface.js",
+			"is_element": false,
+			"name": "tlsclient_Post",
+			"select": "tlsclient_Post_select.js",
+			"template": "{{Value}}"
+		},
+        {
+			"code": [
+				{
+					"file": "tlsclient_Download_code.js",
+					"name": "tlsclient_Download_code"
+				}
+			],
+			"description": {
+				"en": "Download",
+				"ru": "Скачать"
+			},
+			"interface": "tlsclient_Download_interface.js",
+			"is_element": false,
+			"name": "tlsclient_Download",
+			"select": "tlsclient_Download_select.js",
+			"template": "{{Value}} -> {{File}}"
+		},
+        {
+            "code": [
+                {
+                    "file": "tlsclient_Status_code.js",
+                    "name": "tlsclient_Status_code"
+                }
+            ],
+            "description": {
+                "en": "Response Status",
+                "ru": "Статус ответа"
+            },
+            "interface": "tlsclient_Status_interface.js",
+            "is_element": false,
+            "name": "tlsclient_Status",
+            "select": "tlsclient_Status_select.js",
+            "template": "{{Save}}"
+        },
+        {
+            "code": [
+                {
+                    "file": "tlsclient_Content_code.js",
+                    "name": "tlsclient_Content_code"
+                }
+            ],
+            "description": {
+                "en": "Content",
+                "ru": "Содержание ответа"
+            },
+            "interface": "tlsclient_Content_interface.js",
+            "is_element": false,
+            "name": "tlsclient_Content",
+            "select": "tlsclient_Content_select.js",
+            "template": "{{Save}}"
+        },
+        {
+			"code": [
+				{
+					"file": "tlsclient_Fingerprint_code.js",
+					"name": "tlsclient_Fingerprint_code"
+				}
+			],
+			"description": {
+				"en": "Tls Client Set Fingerprint",
+				"ru": "Tls Client Установить Отпечаток"
+			},
+			"interface": "tlsclient_Fingerprint_interface.js",
+			"is_element": false,
+			"name": "tlsclient_Fingerprint",
+			"select": "tlsclient_Fingerprint_select.js",
+			"template": "{{fingerprint}}"
+		},
+        {
+			"code": [
+				{
+					"file": "tlsclient_Proxy_code.js",
+					"name": "tlsclient_Proxy_code"
+				}
+			],
+			"description": {
+				"en": "Tls Client Прокси",
+				"ru": "Tls Client Прокси"
+			},
+			"interface": "tlsclient_Proxy_interface.js",
+			"is_element": false,
+			"name": "tlsclient_Proxy",
+			"select": "tlsclient_Proxy_select.js",
+			"template": "{{ProxyText}}"
+		},
+		{
+            "code": [
+                {
+                    "file": "tlsclient_SetHeaders_code.js",
+                    "name": "tlsclient_SetHeaders_code"
+                }
+            ],
+            "description": {
+                "en": "Tls Client Set Header",
+                "ru": "Tls Client Установить Заголовок"
+            },
+            "interface": "tlsclient_SetHeaders_interface.js",
+            "is_element": false,
+            "name": "tlsclient_SetHeaders",
+            "select": "tlsclient_SetHeaders_select.js",
+            "template": "{{Name}} -> {{Value}}"
+        },
+		{
+            "code": [
+                {
+                    "file": "tlsclient_GetHeaders_code.js",
+                    "name": "tlsclient_GetHeaders_code"
+                }
+            ],
+            "description": {
+                "en": "Get All Headers",
+                "ru": "Получить Все Заголовки"
+            },
+            "interface": "tlsclient_GetHeaders_interface.js",
+            "is_element": false,
+            "name": "tlsclient_GetHeaders",
+            "select": "tlsclient_GetHeaders_select.js",
+            "template": "{{Save}}"
+        },
+        {
+            "code": [
+                {
+                    "file": "tlsclient_GetHeader_code.js",
+                    "name": "tlsclient_GetHeader_code"
+                }
+            ],
+            "description": {
+                "en": "Get Header",
+                "ru": "Получить Заголовок"
+            },
+            "interface": "tlsclient_GetHeader_interface.js",
+            "is_element": false,
+            "name": "tlsclient_GetHeader",
+            "select": "tlsclient_GetHeader_select.js",
+            "template": "{{Value}} -> {{Save}}"
+        },
+        {
+            "code": [
+                {
+                    "file": "tlsclient_ClearHeaders_code.js",
+                    "name": "tlsclient_ClearHeaders_code"
+                }
+            ],
+            "description": {
+                "en": "Clear Headers",
+                "ru": "Очистить Заголовки"
+            },
+            "interface": "tlsclient_ClearHeaders_interface.js",
+            "is_element": false,
+            "name": "tlsclient_ClearHeaders",
+            "select": "tlsclient_ClearHeaders_select.js",
+            "template": ""
+        },
+		{
+			"code": [
+				{
+					"file": "tlsclient_GetCookies_code.js",
+					"name": "tlsclient_GetCookies_code"
+				}
+			],
+			"description": {
+				"en": "Save Cookies",
+				"ru": "Сохранить Куки"
+			},
+			"interface": "tlsclient_GetCookies_interface.js",
+			"is_element": false,
+			"name": "tlsclient_GetCookies",
+			"select": "tlsclient_GetCookies_select.js",
+			"template": "{{Save}}"
+		},
+		{
+			"code": [
+				{
+					"file": "tlsclient_RestoreCookies_code.js",
+					"name": "tlsclient_RestoreCookies_code"
+				}
+			],
+			"description": {
+				"en": "Restore Cookies",
+				"ru": "Загрузить Куки"
+			},
+			"interface": "tlsclient_RestoreCookies_interface.js",
+			"is_element": false,
+			"name": "tlsclient_RestoreCookies",
+			"select": "tlsclient_RestoreCookies_select.js",
+			"template": "{{Value}}"
+		},
+        {
+			"code": [
+				{
+					"file": "tlsclient_SetTimeout_code.js",
+					"name": "tlsclient_SetTimeout_code"
+				}
+			],
+			"description": {
+				"en": "Set Timeout",
+				"ru": "Установить Таймаут"
+			},
+			"interface": "tlsclient_SetTimeout_interface.js",
+			"is_element": false,
+			"name": "tlsclient_SetTimeout",
+			"select": "tlsclient_SetTimeout_select.js",
+			"template": "{{Value}}"
+		}
+	],
+	"api_version": 1,
+	"browser": [],
+	"depends": [],
+	"description": "Tls Client",
+	"description_small": {
+		"en": "Tls Client",
+		"ru": "Tls Client"
+	},
+	"developer_name": "kumchick2005",
+	"developer_email": "-",
+	"developer_site": "https://t.me/kumchick2",
+	"embeddeddata": [],
+	"engine": [
+		"engine.js"
+	],
+	"is_autogenerated": false,
+	"icon": "icon.png",
+	"info": {
+		"en": "Http Client with support for JA3 Fingerprint spoofing",
+		"ru": "Http Client с поддержкой подмены JA3 Отпечатка"
+	},
+	"languages": [],
+	"localize": {
+		"Variable to save response": {"ru": "Переменная, в которую сохранить результат"},
+		"Save Id Session": {"ru": "Сохранить Ид сессии"},
+		"Variable to save Id session": {"ru": "Переменная, в которую сохранить Ид сессии"},
+		"Id Session": {"ru": "Ид сессии"},
+		"Is byte response": {"ru": "Сохранить в base64 формате"}
+	},
+	"major_version": 1,
+	"minor_version": 0,
+	"modules": [],
+	"name": "TlsClient",
+	"dll": [
+		{
+			"name": "tls_client",
+			"filename32": "anus.dll",
+			"filename64": "anus.dll",
+			"startdllfunction": "StartDll",
+			"enddllfunction": "EndDll", 
+			"startthreadfunction": "StartThread", 
+			"endthreadfunction": "EndThread", 
+			"exportlist": [
+				{
+					"name": "OpenSniffer",
+					"isasync": true,
+					"waitinfinite": false,
+					"workfunction": "OpenSniffer"
+				},
+                {
+					"name": "Request",
+					"isasync": true,
+					"waitinfinite": false,
+					"workfunction": "Request"
+				},
+                {
+					"name": "GetResponse",
+					"isasync": false,
+					"waitinfinite": false,
+					"workfunction": "GetResponse"
+				},
+                {
+                    "name": "SetFingerprint",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "SetFingerprint"
+                },
+                {
+                    "name": "GetHeaders",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "GetHeaders"
+                },
+                {
+                    "name": "SetTimeout",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "SetTimeout"
+                },
+                {
+                    "name": "Reset",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "Reset"
+                },
+                {
+                    "name": "SetHeader",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "SetHeader"
+                },
+                {
+                    "name": "ClearHeaders",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "ClearHeaders"
+                },
+                {
+                    "name": "SetProxy",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "SetProxy"
+                },
+                {
+                    "name": "SaveCookies",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "SaveCookies"
+                },
+                {
+                    "name": "GetStatus",
+                    "isasync": false,
+                    "waitinfinite": false,
+                    "workfunction": "GetStatus"
+                }
+			]
+		}
+	]
+}

@@ -1,0 +1,1 @@
+<%= variable %> = JSON.parse(native("tls_client", "GetHeaders", "all"));

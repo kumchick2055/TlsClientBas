@@ -192,20 +192,3 @@ void CookieJar::clear() {
     cookies.clear();
 }
 
-//int main()
-//{
-//    std::string cookie1 = "NID=511=cbIvahRL_xsfdgMQdTYCe7UVrKtbYGC4UDSxTcylQxMACi-Xy8kwwjbQFSYFZfKYwE00BbVj6eLxNagOaDRBir2kD-F4_eLjNQTaYw6B4QiUOGl9MDQc2py11BXmKXZoS7wNw24psZuY10SLgbj_NCJmOYcdwT-OmpnDm2GU90o; expires=Thu, 01-Aug-2024 13:58:50 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=none";
-//    std::string cookie2 = "1P_JAR=2024-01-31-13; expires=Fri, 01-Mar-2024 13:58:51 GMT; path=/; domain=google.com; Secure; SameSite=none";
-//    std::string cookie3 = "AEC=Ae3NU9PlTefIUgOhIrXaW-EW21sx7NUj2EWoQmaiVRvLkNBp72Aln2CPTtM; expires=Mon, 29-Jul-2024 13:58:51 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax";
-//
-//    CookieJar jar;
-//    jar.addCookie(Cookie(cookie1));
-//    jar.addCookie(Cookie(cookie2));
-//    jar.addCookie(Cookie(cookie3));
-//
-//    std::vector<Cookie> cookies = jar.getCookiesForUrl("https://www.google.com");
-//
-//    for (auto& cookie : cookies) {
-//        std::cout << cookie.toString() << "\n" << std::endl;
-//    }
-//}
