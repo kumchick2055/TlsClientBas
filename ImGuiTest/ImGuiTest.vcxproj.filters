@@ -45,13 +45,13 @@
     <ClCompile Include="utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="base64.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="cookie.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="post.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="base64.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,13 +92,13 @@
     <ClInclude Include="gui.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="base64.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="cookie.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="post.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="base64.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

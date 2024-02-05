@@ -4,6 +4,7 @@
 #include <iostream>
 #include <random>
 #include <sstream>
+#include "base64.h"
 #include "vendor/nlohmann/json.hpp"
 
 
@@ -118,4 +119,48 @@ std::string getValueOrDefault(const nlohmann::json& doc, const std::string& key,
 		return doc[key].get<std::string>();
 	}
 	return defaultValue;
+}
+
+std::string urlEncode(const std::string& value) {
+	std::ostringstream escaped;
+	escaped.fill('0');
+	escaped << std::hex;
+
+	for (char c : value) {
+		if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+			escaped << c;
+		}
+		else {
+			escaped << std::uppercase;
+			escaped << '%' << std::setw(2) << int((unsigned char)c);
+			escaped << std::nouppercase;
+		}
+	}
+
+	return escaped.str();
+}
+
+std::map<std::string, std::string> parsePayload(const std::string& payload) {
+	std::map<std::string, std::string> result;
+	nlohmann::json j = nlohmann::json::parse(payload);
+
+	if (j.size() % 2 == 0) {
+		auto it = j.begin();
+		while (it != j.end()) {
+			if (it->is_string() && std::next(it) != j.end() && std::next(it)->is_string()) {
+				result[it->get<std::string>()] = std::next(it)->get<std::string>();
+				it += 2;
+			}
+			else {
+				return result;
+			}
+		}
+	}
+
+	return result;
+}
+
+std::vector<BYTE> string_to_byte_vector(const std::string& str) {
+	std::vector<BYTE> byteVector(str.begin(), str.end());
+	return byteVector;
 }

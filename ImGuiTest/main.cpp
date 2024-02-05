@@ -9,6 +9,7 @@
 #include <locale>
 #include "utils.h"
 #include "cookie.h"
+#include "post.h"
 #include <fstream>
 
 struct HttpClient {
@@ -293,6 +294,27 @@ extern "C" {
 			nlohmann::json inputJson = nlohmann::json::parse(InputJson);
 
 			std::string currentUrl = inputJson["url"].get<std::string>();
+			std::string method = inputJson["method"].get<std::string>();
+			std::string payloadConstructor = "";
+			bool isConstructor = false;
+			std::string payloadRaw = "";
+			std::string contentTypeRaw = "";
+			std::string contentTypeConstructor = "";
+
+			if(inputJson.find("payloadConstructor") != inputJson.end())
+				payloadConstructor = inputJson["payloadConstructor"].get<std::string>();
+
+			if (inputJson.find("isConstructor") != inputJson.end())
+				isConstructor = inputJson["isConstructor"].get<bool>();
+
+			if (inputJson.find("payloadRaw") != inputJson.end())
+				payloadRaw = inputJson["payloadRaw"].get<std::string>();
+
+			if (inputJson.find("contentTypeRaw") != inputJson.end())
+				contentTypeRaw = inputJson["contentTypeRaw"].get<std::string>();
+
+			if (inputJson.find("contentTypeConstructor") != inputJson.end())
+				contentTypeConstructor = inputJson["contentTypeConstructor"].get<std::string>();
 
 			requestJson["tlsClientIdentifier"] = client->clientIdentifier;
 			requestJson["sessionId"] = client->threadSession;
@@ -300,7 +322,7 @@ extern "C" {
 			requestJson["proxyUrl"] = client->proxy;
 
 			requestJson["requestUrl"] = inputJson["url"].get<std::string>();
-			requestJson["requestMethod"] = inputJson["method"].get<std::string>();
+			requestJson["requestMethod"] = method;
 			requestJson["isByteResponse"] = inputJson["isByteResponse"].get<bool>();
 			requestJson["followRedirects"] = inputJson["redirect"].get<bool>();
 			std::string headersStr = inputJson["headers"].get<std::string>() + "\r\n";
@@ -333,6 +355,29 @@ extern "C" {
 
 			if (client->jar.length() > 0) {
 				requestHeaders["cookie"] = client->jar.getCookiesForUrl(currentUrl);
+			}
+
+			// Generate the Body for the request
+			if (method == "POST" || method == "PUT" || method == "PATCH") {
+				if (isConstructor) {
+					std::map<std::string, std::string> payload = parsePayload(payloadConstructor);
+					std::string result = "";
+
+					// UrlEncoded
+					if (contentTypeConstructor == "urlencoded") {
+						requestJson["requestBody"] = createUrlEncoded(payload);
+						requestHeaders["content-type"] = "application/x-www-form-urlencoded";
+					}
+					// Json
+					if (contentTypeConstructor == "json") {
+						requestJson["requestBody"] = createJsonBody(payload);
+						requestHeaders["content-type"] = "application/json";
+					}
+				}
+				else {
+					requestJson["requestBody"] = payloadRaw;
+					requestHeaders["content-type"] = contentTypeRaw;
+				}
 			}
 
 			for (auto& header : requestHeaders.items()) {

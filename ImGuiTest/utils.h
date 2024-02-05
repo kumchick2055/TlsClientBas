@@ -6,6 +6,7 @@
 #include <random>
 #include <sstream>
 #include <regex>
+#include "base64.h"
 #include "vendor/nlohmann/json.hpp"
 
 std::string searchForTlsClientDll(const std::filesystem::path& dir);
@@ -17,5 +18,7 @@ std::string join(const std::vector<std::string>& vec, const std::string& delimit
 int countSubstring(const std::string& str, const std::string& sub);
 long long currentTime();
 std::string getValueOrDefault(const nlohmann::json& doc, const std::string& key, const std::string& defaultValue);
+std::string urlEncode(const std::string& value);
+std::map<std::string, std::string> parsePayload(const std::string& payload);
 
 #endif
