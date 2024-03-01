@@ -1,4 +1,10 @@
 <div class="container-fluid">
+    <%= _.template($('#input_constructor').html())({
+        id:"Url", 
+        description:tr("URL"), 
+        default_selector: "string", 
+        disable_int:true, 
+    }) %>
 	<%= _.template($('#input_constructor').html())({
         id:"Value", 
         description:tr("Cookies"), 

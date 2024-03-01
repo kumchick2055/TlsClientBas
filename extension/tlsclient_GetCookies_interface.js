@@ -1,4 +1,16 @@
 <div class="container-fluid">
+    <%= _.template($('#input_constructor').html())({
+        id:"Value", 
+        description:tr("URL"), 
+        default_selector: "string", 
+        disable_int:true, 
+        help: {
+            description: tr("Get specified cookies for a given site"), 
+            examples:[
+            {code:"URL",description:tr("http:// or https:// is required!\r\nURL for which we receive cookies")},
+           ]
+       }
+    }) %>
 	<%= _.template($('#variable_constructor').html())({
         id:"Save", 
         description:tr("Variable To Save"), 

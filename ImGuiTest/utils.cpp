@@ -5,6 +5,7 @@
 #include <random>
 #include <sstream>
 #include "base64.h"
+#include <Windows.h>
 #include "vendor/nlohmann/json.hpp"
 
 
@@ -142,6 +143,7 @@ std::string urlEncode(const std::string& value) {
 
 std::map<std::string, std::string> parsePayload(const std::string& payload) {
 	std::map<std::string, std::string> result;
+
 	nlohmann::json j = nlohmann::json::parse(payload);
 
 	if (j.size() % 2 == 0) {
@@ -160,7 +162,9 @@ std::map<std::string, std::string> parsePayload(const std::string& payload) {
 	return result;
 }
 
-std::vector<BYTE> string_to_byte_vector(const std::string& str) {
-	std::vector<BYTE> byteVector(str.begin(), str.end());
-	return byteVector;
+std::time_t parseDateTime(const std::string& dateTimeStr) {
+	std::tm tm = {};
+	std::istringstream ss(dateTimeStr);
+	ss >> std::get_time(&tm, "%Y-%m-%dT%H:%M:%SZ");
+	return std::mktime(&tm);
 }

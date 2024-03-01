@@ -29,7 +29,8 @@ try{
         PostDataRaw: PostDataRaw["updated"].replace(/base64:/g, "_browserautomationstudio_base64:"),
         ContentTypeRaw: ContentTypeRaw["updated"],
         Params: "[" + PostDataArray["updated"] + "]",
-        Headers: Headers["updated"]
+        Headers: Headers["updated"],
+        Redirect: Redirect
     })
 	code = Normalize(code, 0);
 	BrowserAutomationStudio_Append("", BrowserAutomationStudio_SaveControls() + code, action, DisableIfAdd);

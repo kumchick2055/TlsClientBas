@@ -1,1 +1,1 @@
-<%= variable %> = native("tls_client", "SaveCookies", "");
+<%= variable %> = native("tls_client", "SaveCookies", (<%= Value %>) );

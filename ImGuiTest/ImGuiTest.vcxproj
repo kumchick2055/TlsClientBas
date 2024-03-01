@@ -137,7 +137,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="base64.cpp" />
-    <ClCompile Include="cookie.cpp" />
     <ClCompile Include="gui.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="post.cpp" />
@@ -152,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="base64.h" />
-    <ClInclude Include="cookie.h" />
     <ClInclude Include="gui.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="post.h" />

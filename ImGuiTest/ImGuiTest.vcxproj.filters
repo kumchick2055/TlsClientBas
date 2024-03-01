@@ -45,9 +45,6 @@
     <ClCompile Include="utils.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="cookie.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="post.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -90,9 +87,6 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="gui.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="cookie.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="post.h">

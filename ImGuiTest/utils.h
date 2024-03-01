@@ -20,5 +20,6 @@ long long currentTime();
 std::string getValueOrDefault(const nlohmann::json& doc, const std::string& key, const std::string& defaultValue);
 std::string urlEncode(const std::string& value);
 std::map<std::string, std::string> parsePayload(const std::string& payload);
+std::time_t parseDateTime(const std::string& dateTimeStr);
 
 #endif
