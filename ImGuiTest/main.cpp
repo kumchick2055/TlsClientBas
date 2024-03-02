@@ -389,7 +389,7 @@ extern "C" {
 
 			requestJson["requestUrl"] = inputJson["url"].get<std::string>();
 			requestJson["requestMethod"] = method;
-			requestJson["isByteResponse"] = inputJson["isByteResponse"].get<bool>();
+			requestJson["isByteResponse"] = true;
 			requestJson["followRedirects"] = inputJson["redirect"].get<bool>();
 			std::string headersStr = inputJson["headers"].get<std::string>() + "\r\n";
 
@@ -500,17 +500,6 @@ extern "C" {
 
 			nlohmann::json currentResJson = nlohmann::json::parse(responseStr);
 
-			//if (currentResJson.find("headers") != currentResJson.end()) {
-			//	client->lastHeadersStr = currentResJson["headers"].dump();
-
-			//	nlohmann::json& reqHeaders = currentResJson["headers"];
-			//	if (reqHeaders.find("Set-Cookie") != reqHeaders.end()) {
-			//		for (const auto& it : reqHeaders["Set-Cookie"]) {
-			//			client->jar.addCookie(Cookie(it));
-			//		}
-			//	}
-			//}
-
 			client->status = currentResJson["status"].get<int>();
 
 			// Add the Response to the container
@@ -533,7 +522,26 @@ extern "C" {
 		HINSTANCE library = reinterpret_cast<HINSTANCE>(DllData);
 
 		if (library != NULL) {
-			char* res = client->lastResponse.data();
+			nlohmann::json resJson = nlohmann::json::parse(client->lastResponse);
+			std::string inputJson = InputJson;
+			std::string body;
+
+			if (resJson.find("body") != resJson.end()) {
+				body = resJson["body"].get<std::string>();
+
+				if (inputJson == "true") {
+					if (body.find(";base64,") != std::string::npos) {
+
+						std::string base64Body = splitString(body, ";base64,").at(1);
+
+						std::vector<BYTE> decodeBase64Body = base64_decode(base64Body);
+
+						body = std::string(decodeBase64Body.begin(), decodeBase64Body.end());
+					}
+				}
+			}
+
+			const char* res = body.c_str();
 
 			char* resMemory = AllocateSpace(static_cast<int>(strlen(res)), AllocateData);
 			memcpy(resMemory, res, strlen(res));

@@ -433,6 +433,15 @@ bool addHttpData(char* requestData, char* responseData) {
 
     std::string responseUrl = getValueOrDefault(responseDoc, "target", "<No Url>");
     std::string responseBody = getValueOrDefault(responseDoc, "body", "<No Body>");
+
+    if (responseBody.find(";base64,") != std::string::npos) {
+        std::string base64Body = splitString(responseBody, ";base64,").at(1);
+
+        std::vector<BYTE> decodeBase64Body = base64_decode(base64Body);
+
+        responseBody = std::string(decodeBase64Body.begin(), decodeBase64Body.end());
+    }
+
     std::string responseStatus = std::to_string(responseDoc["status"].get<int>());
     std::string responseProtocol = getValueOrDefault(responseDoc, "usedProtocol", "<No Protocol>");
     std::string responseHeaders = "<No Headers>";

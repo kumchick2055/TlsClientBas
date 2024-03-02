@@ -1,3 +1,9 @@
-response = JSON.parse(native("tls_client", "GetResponse", ""));
+requestJson = "false";
 
-<%= variable %> = response["body"];
+if( (<%= Decode %>) ){
+    requestJson = "true";
+}
+
+response = native("tls_client", "GetResponse", requestJson);
+
+<%= variable %> = response;

@@ -300,7 +300,9 @@
 		"Save Id Session": {"ru": "Сохранить Ид сессии"},
 		"Variable to save Id session": {"ru": "Переменная, в которую сохранить Ид сессии"},
 		"Id Session": {"ru": "Ид сессии"},
-		"Is byte response": {"ru": "Сохранить в base64 формате"}
+		"Is byte response": {"ru": "Сохранить в base64 формате"},
+        "Get specified cookies for a given site": {"ru": "Получить куки для заданного сайта"},
+        "http:// or https:// is required!\r\nURL for which we receive cookies": {"ru": "http:// или https:// обязятелен!\r\nСсылка для которой получаем куки"}
 	},
 	"major_version": 1,
 	"minor_version": 0,
