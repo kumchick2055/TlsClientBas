@@ -140,13 +140,33 @@ extern "C" {
 			client->lastHeadersStr = "{}";
 			client->headers.clear();
 			client->proxy = "";
-			//client->jar.clear();
 
 			requestJson["sessionId"] = client->threadSession;
 
 			DoRequest destroySession = reinterpret_cast<DoRequest>(GetProcAddress(library, "destroySession"));
 			destroySession(const_cast<char*>(requestJson.dump().c_str()));
-	}
+
+			client->threadSession = getUuid();
+
+			client->headers["accept"] = "*/*";
+			client->headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
+
+			std::string tlsClientDll = searchForTlsClientDll(std::filesystem::current_path());
+			requestJson = nlohmann::json::object();
+
+			requestJson["sessionId"] = client->threadSession;
+
+			if (!tlsClientDll.empty()) {
+				HINSTANCE loadLibrary = LoadLibraryA(tlsClientDll.c_str());
+
+				if (loadLibrary != NULL) {
+					DoRequest createClient = reinterpret_cast<DoRequest>(GetProcAddress(loadLibrary, "createClient"));
+
+					createClient(const_cast<char*>(requestJson.dump().c_str()));
+				}
+			}
+
+		}
 	}
 
 	void GetHeaders(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
@@ -242,14 +262,6 @@ extern "C" {
 	}
 
 	void SaveCookies(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
-		//HttpClient* client = static_cast<HttpClient*>(ThreadData);
-		
-		//std::string cookiesJson = client->jar.toBasString();
-		//const char* tmp = cookiesJson.c_str();
-
-		//char* ResMemory = AllocateSpace(static_cast<int>(strlen(tmp)), AllocateData);
-		//memcpy(ResMemory, tmp, strlen(tmp));
-
 		HINSTANCE library = reinterpret_cast<HINSTANCE>(DllData);
 		HttpClient* client = static_cast<HttpClient*>(ThreadData);
 
@@ -302,47 +314,11 @@ extern "C" {
 			}
 		}
 
-		MessageBoxA(NULL, requestJson.dump().c_str(), "", MB_OK);
-
 		DoRequest addCookiesToSession = reinterpret_cast<DoRequest>(GetProcAddress(library, "addCookiesToSession"));
 		char* result = addCookiesToSession(const_cast<char*>(requestJson.dump().c_str()));
 
-		MessageBoxA(NULL, result, "", MB_OK);
-
 		char* ResMemory = AllocateSpace(static_cast<int>(strlen(result)), AllocateData);
 		memcpy(ResMemory, result, strlen(result));
-		////client->jar.clear();
-
-		//if (cookiesJson.find("cookies") != cookiesJson.end()) {
-		//	if (cookiesJson["cookies"].is_array()) {
-		//		// Если массив пустой, то очищаем куки
-		//		if (cookiesJson["cookies"].size() == 0) {
-		//			client->jar.clear();
-		//		}
-		//		for (const auto& cookieData : cookiesJson["cookies"]) {
-		//			Cookie cookie("");
-
-		//			if (cookieData.find("domain") == cookieData.end() ||
-		//				cookieData.find("expires") == cookieData.end() ||
-		//				cookieData.find("httpOnly") == cookieData.end() ||
-		//				cookieData.find("name") == cookieData.end() ||
-		//				cookieData.find("path") == cookieData.end() ||
-		//				cookieData.find("secure") == cookieData.end()) {
-		//				continue;
-		//			}
-
-		//			cookie.domain = cookieData["domain"].get<std::string>();
-		//			cookie.expires = cookieData["expires"].get<long long>();
-		//			cookie.httpOnly = cookieData["httpOnly"].get<bool>();
-		//			cookie.name = cookieData["name"].get<std::string>();
-		//			cookie.path = cookieData["path"].get<std::string>();
-		//			cookie.secure = cookieData["secure"].get<bool>();
-		//			cookie.value = cookieData["value"].get<std::string>();
-
-		//			client->jar.addCookie(cookie);
-		//		}
-		//	}
-		//}
 	}
 
 	void Request(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
