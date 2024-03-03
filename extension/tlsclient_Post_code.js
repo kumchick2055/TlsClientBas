@@ -11,9 +11,6 @@ native_async("tls_client", "Request", JSON.stringify({
     "contentTypeConstructor": (<%= ContentType %>)
 }))!
 
-log(<%= ContentType %>);
-
-
 parsedResponse = JSON.parse(_result());
 
 if(parsedResponse["status"] < 200){

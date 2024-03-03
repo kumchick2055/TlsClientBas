@@ -43,6 +43,15 @@ std::string getUuid() {
 	return res;
 }
 
+char getRandomChar(const std::string& str) {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> distribution(0, str.size() - 1);
+
+	int randomIndex = distribution(gen);
+	return str[randomIndex];
+}
+
 std::string updateJsonString(const std::string& jsonString, const std::string& key, const std::string& value) {
 	nlohmann::json document = nlohmann::json::parse(jsonString);
 

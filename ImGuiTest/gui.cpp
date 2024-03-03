@@ -412,6 +412,12 @@ bool addHttpData(char* requestData, char* responseData) {
     std::string requestUrl = getValueOrDefault(requestDoc, "requestUrl", "<No Url>");
     std::string requestMethod = getValueOrDefault(requestDoc, "requestMethod", "<No Method>");
     std::string requestBody = getValueOrDefault(requestDoc, "requestBody", "<No Body>");
+
+    std::vector<BYTE> decodeBase64BodyReq = base64_decode(requestBody);
+
+    requestBody = std::string(decodeBase64BodyReq.begin(), decodeBase64BodyReq.end());
+
+
     std::string requestHeaders = getValueOrDefault(requestDoc, "requestHeaders", "<No Headers>");
 
     if (requestDoc.find("headers") != requestDoc.end()) {

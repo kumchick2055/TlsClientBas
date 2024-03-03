@@ -21,5 +21,6 @@ std::string getValueOrDefault(const nlohmann::json& doc, const std::string& key,
 std::string urlEncode(const std::string& value);
 std::map<std::string, std::string> parsePayload(const std::string& payload);
 std::time_t parseDateTime(const std::string& dateTimeStr);
+char getRandomChar(const std::string& str);
 
 #endif

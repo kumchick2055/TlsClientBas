@@ -390,6 +390,7 @@ extern "C" {
 			requestJson["requestUrl"] = inputJson["url"].get<std::string>();
 			requestJson["requestMethod"] = method;
 			requestJson["isByteResponse"] = true;
+			requestJson["isByteRequest"] = true;
 			requestJson["followRedirects"] = inputJson["redirect"].get<bool>();
 			std::string headersStr = inputJson["headers"].get<std::string>() + "\r\n";
 
@@ -397,6 +398,10 @@ extern "C" {
 			nlohmann::json& requestHeadersOrder = requestJson["headerOrder"];
 
 			std::vector<std::string> splitHeaders = split(headersStr, "\r\n");
+
+			for (auto it = client->headers.begin(); it != client->headers.end(); ++it) {
+				requestHeaders[it->first] = it->second;
+			}
 
 			std::regex pattern("([^:]+):\\s*([^\\r\\n]+)");
 			std::smatch match;
@@ -415,9 +420,6 @@ extern "C" {
 				}
 			}
 
-			for (auto it = client->headers.begin(); it != client->headers.end(); ++it) {
-				requestHeaders[it->first] = it->second;
-			}
 
 			//if (client->jar.length() > 0) {
 			//	requestHeaders["cookie"] = client->jar.getCookiesForUrl(currentUrl);
@@ -468,17 +470,42 @@ extern "C" {
 					std::string result = "";
 
 					// UrlEncoded
-					if (contentTypeConstructor == "urlencoded") {
-						requestJson["requestBody"] = createUrlEncoded(payload);
+					if (contentTypeConstructor == "urlencode") {
+						std::string urlencodeBody = createUrlEncoded(payload);
+						std::vector<BYTE> bodyByte(urlencodeBody.begin(), urlencodeBody.end());
+
+						urlencodeBody = base64_encode(bodyByte.data(), bodyByte.size());
+
+						requestJson["requestBody"] = urlencodeBody;
 						requestHeaders["content-type"] = "application/x-www-form-urlencoded";
 					}
 					// Json
 					if (contentTypeConstructor == "json") {
-						requestJson["requestBody"] = createJsonBody(payload);
+						std::string jsonBody = createJsonBody(payload);
+						std::vector<BYTE> bodyByte(jsonBody.begin(), jsonBody.end());
+
+						jsonBody = base64_encode(bodyByte.data(), bodyByte.size());
+
+						requestJson["requestBody"] = jsonBody;
 						requestHeaders["content-type"] = "application/json";
+					}
+					// Multipart/Form-Data
+					if (contentTypeConstructor == "multipart") {
+						std::vector<std::string> multipartData = generateMultipartFormData(payload);
+						std::string multipartBody = multipartData.at(1);
+
+						std::vector<BYTE> bodyByte(multipartBody.begin(), multipartBody.end());
+
+						multipartBody = base64_encode(bodyByte.data(), bodyByte.size());
+						
+						requestJson["requestBody"] = multipartBody;
+						requestHeaders["content-type"] = "multipart/form-data; boundary=" + multipartData.at(0);
 					}
 				}
 				else {
+					std::vector<BYTE> bodyByte(payloadRaw.begin(), payloadRaw.end());
+					payloadRaw = base64_encode(bodyByte.data(), bodyByte.size());
+
 					requestJson["requestBody"] = payloadRaw;
 					requestHeaders["content-type"] = contentTypeRaw;
 				}
@@ -494,6 +521,8 @@ extern "C" {
 			DoRequest req = reinterpret_cast<DoRequest>(GetProcAddress(library, "request"));
 
 			char* res = req(updatedJsonString.data());
+
+			//MessageBoxA(NULL, res, "", MB_OK);
 
 			std::string responseStr = res;
 			std::string responseId = responseStr.substr(7, 36);
@@ -541,7 +570,7 @@ extern "C" {
 				}
 			}
 
-			const char* res = body.c_str();
+			char* res = body.data();
 
 			char* resMemory = AllocateSpace(static_cast<int>(strlen(res)), AllocateData);
 			memcpy(resMemory, res, strlen(res));

@@ -6,5 +6,6 @@
 
 std::string createUrlEncoded(const std::map<std::string, std::string>& payload);
 std::string createJsonBody(const std::map<std::string, std::string>& payload);
+std::vector<std::string> generateMultipartFormData(const std::map<std::string, std::string>& payload);
 
 #endif
