@@ -96,8 +96,6 @@ std::vector<std::string> generateMultipartFormData(const std::map<std::string, s
 		std::string second = it->second;
 
 		if (second.find("file://") != std::string::npos) {
-
-			//MessageBoxA(NULL, "OK", ":(", MB_OK);
 			std::string filePathRaw = splitString(second, "file://").at(1);
 
 			int wchars_num = MultiByteToWideChar(CP_UTF8, 0, filePathRaw.c_str(), -1, NULL, 0);

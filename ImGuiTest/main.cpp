@@ -421,11 +421,6 @@ extern "C" {
 			}
 
 
-			//if (client->jar.length() > 0) {
-			//	requestHeaders["cookie"] = client->jar.getCookiesForUrl(currentUrl);
-			//}
-
-
 			nlohmann::json requestJsonCookie = nlohmann::json::parse(R"({
 				"sessionId": "",
 				"url": ""
@@ -455,7 +450,6 @@ extern "C" {
 
 				}
 			}
-
 			
 			if (requestHeaders.find("cookie") != requestHeaders.end()) {
 				if (requestHeaders["cookie"].size() == 0) {
@@ -522,8 +516,6 @@ extern "C" {
 
 			char* res = req(updatedJsonString.data());
 
-			//MessageBoxA(NULL, res, "", MB_OK);
-
 			std::string responseStr = res;
 			std::string responseId = responseStr.substr(7, 36);
 
@@ -543,6 +535,42 @@ extern "C" {
 			// Free Memory
 			DoRequest freeMemory = reinterpret_cast<DoRequest>(GetProcAddress(library, "freeMemory"));
 			freeMemory(const_cast<char*>(responseId.c_str()));
+
+			// Download
+			if (inputJson.find("downloadPath") != inputJson.end()) {
+				std::string downloadPath = inputJson["downloadPath"].get<std::string>();
+
+				int wchars_num = MultiByteToWideChar(CP_UTF8, 0, downloadPath.c_str(), -1, NULL, 0);
+				wchar_t* wstr = new wchar_t[wchars_num];
+				MultiByteToWideChar(CP_UTF8, 0, downloadPath.c_str(), -1, wstr, wchars_num);
+
+				std::filesystem::path filePath(wstr);
+
+				if (std::filesystem::exists(filePath.parent_path())) {
+					std::string responseBody;
+
+
+					if (currentResJson.find("body") != currentResJson.end()) {
+						responseBody = currentResJson["body"].get<std::string>();
+					}
+
+					if (responseBody.find(";base64,") != std::string::npos) {
+						std::string base64Body = splitString(responseBody, ";base64,").at(1);
+						std::vector<BYTE> decodeBase64Body = base64_decode(base64Body);
+
+						responseBody = std::string(decodeBase64Body.begin(), decodeBase64Body.end());
+					}
+
+					std::ofstream file(filePath);
+					if (file.is_open()) {
+						file << responseBody;
+					}
+					file.close();
+
+				}
+
+				delete[] wstr;
+			}
 		}
 	}
 
