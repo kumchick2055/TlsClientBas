@@ -14,7 +14,7 @@
 struct HttpClient {
 	std::string lastResponse;
 	std::string threadSession;
-	std::string clientIdentifier = "chrome_103";
+	std::string clientIdentifier = "chrome_120";
 	std::string lastHeadersStr = "{}";
 	std::map<std::string, std::string> headers;
 	std::string proxy;
@@ -55,24 +55,10 @@ extern "C" {
 	void* StartThread() {
 		HttpClient* client = new HttpClient;
 		client->threadSession = getUuid();
-
 		client->headers["accept"] = "*/*";
-		client->headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
-
-		std::string tlsClientDll = searchForTlsClientDll(std::filesystem::current_path());
-		nlohmann::json requestJson = nlohmann::json::object();
-
-		requestJson["sessionId"] = client->threadSession;
-
-		if (!tlsClientDll.empty()) {
-			HINSTANCE loadLibrary = LoadLibraryA(tlsClientDll.c_str());
-
-			if (loadLibrary != NULL) {
-				DoRequest createClient = reinterpret_cast<DoRequest>(GetProcAddress(loadLibrary, "createClient"));
-
-				createClient(const_cast<char*>(requestJson.dump().c_str()));
-			}
-		}
+		client->headers["accept-encoding"] = "gzip, deflate, br";
+		client->headers["connection"] = "keep-alive";
+		client->headers["user-agent"] = "tls-client/1.0";
 
 		return static_cast<void*>(client);
 	}
@@ -135,7 +121,7 @@ extern "C" {
 			)");
 
 			client->timeout = 30;
-			client->clientIdentifier = "chrome_103";
+			client->clientIdentifier = "chrome_120";
 			client->lastResponse = "";
 			client->lastHeadersStr = "{}";
 			client->headers.clear();
@@ -149,23 +135,9 @@ extern "C" {
 			client->threadSession = getUuid();
 
 			client->headers["accept"] = "*/*";
-			client->headers["user-agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36";
-
-			std::string tlsClientDll = searchForTlsClientDll(std::filesystem::current_path());
-			requestJson = nlohmann::json::object();
-
-			requestJson["sessionId"] = client->threadSession;
-
-			if (!tlsClientDll.empty()) {
-				HINSTANCE loadLibrary = LoadLibraryA(tlsClientDll.c_str());
-
-				if (loadLibrary != NULL) {
-					DoRequest createClient = reinterpret_cast<DoRequest>(GetProcAddress(loadLibrary, "createClient"));
-
-					createClient(const_cast<char*>(requestJson.dump().c_str()));
-				}
-			}
-
+			client->headers["accept-encoding"] = "gzip, deflate, br";
+			client->headers["connection"] = "keep-alive";
+			client->headers["user-agent"] = "tls-client/1.0";
 		}
 	}
 
@@ -336,7 +308,7 @@ extern "C" {
 					"withDefaultCookieJar": false,
 					"forceHttp1": false,
 					"withDebug": false,
-					"withRandomTLSExtensionOrder": false,
+					"withRandomTLSExtensionOrder": true,
 					"isByteResponse": false,
 					"isByteRequest": false,
 					"catchPanics": false,
@@ -382,6 +354,7 @@ extern "C" {
 			if (inputJson.find("contentTypeConstructor") != inputJson.end())
 				contentTypeConstructor = inputJson["contentTypeConstructor"].get<std::string>();
 
+
 			requestJson["tlsClientIdentifier"] = client->clientIdentifier;
 			requestJson["sessionId"] = client->threadSession;
 			requestJson["timeoutSeconds"] = client->timeout;
@@ -395,7 +368,7 @@ extern "C" {
 			std::string headersStr = inputJson["headers"].get<std::string>() + "\r\n";
 
 			nlohmann::json& requestHeaders = requestJson["headers"];
-			nlohmann::json& requestHeadersOrder = requestJson["headerOrder"];
+			//nlohmann::json& requestHeadersOrder = requestJson["headerOrder"];
 
 			std::vector<std::string> splitHeaders = split(headersStr, "\r\n");
 
@@ -505,9 +478,9 @@ extern "C" {
 				}
 			}
 
-			for (auto& header : requestHeaders.items()) {
-				requestHeadersOrder.push_back(header.key());
-			}
+			//for (auto& header : requestHeaders.items()) {
+			//	requestHeadersOrder.push_back(header.key());
+			//}
 
 
 			std::string updatedJsonString = requestJson.dump();

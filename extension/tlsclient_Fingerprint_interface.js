@@ -65,7 +65,7 @@
     }) %>
 </div>
 <div class="tooltipinternal">
-	<div class="tr tooltip-paragraph-first-fold">Выберите Браузер отпечаток которого вы хотите установить.</div>
+	<div class="tr tooltip-paragraph-first-fold">Выберите Браузер отпечаток которого вы хотите установить. Необходимо устанавливать перед выполнением первого запроса, иначе отпечаток не установится. Для решение этого нужно сбросить настройки Http Клиента.</div>
 </div>
 
 <%= _.template($('#back').html())({action:"executeandadd", visible:true}) %>
