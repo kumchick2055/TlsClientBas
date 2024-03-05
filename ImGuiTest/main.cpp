@@ -158,7 +158,7 @@ extern "C" {
 			}
 			else {
 				if (lastHeaders.find(inputJson) != lastHeaders.end()) {
-					std::string tempData = lastHeaders[inputJson][0].get<std::string>();
+					std::string tempData = lastHeaders[inputJson].dump();
 
 					const char* currentHeader = tempData.c_str();
 
@@ -495,6 +495,12 @@ extern "C" {
 			nlohmann::json currentResJson = nlohmann::json::parse(responseStr);
 
 			client->status = currentResJson["status"].get<int>();
+			if (currentResJson["headers"].is_object()) {
+				client->lastHeadersStr = currentResJson["headers"].dump();
+			}
+			else {
+				client->lastHeadersStr = "{}";
+			}
 
 			// Add the Response to the container
 			addHttpData(requestJson.dump().data(), res);
