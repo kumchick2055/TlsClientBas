@@ -417,7 +417,7 @@ extern "C" {
 					}
 
 					if (cookiesStr.size() != 0) {
-						cookiesStr.erase(cookiesStr.size() - 1);
+						cookiesStr = cookiesStr.substr(0, cookiesStr.length() - 2);;
 						requestHeaders["cookie"] = cookiesStr;
 					}
 
