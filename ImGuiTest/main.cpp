@@ -257,33 +257,53 @@ extern "C" {
 		HINSTANCE library = reinterpret_cast<HINSTANCE>(DllData);
 		HttpClient* client = static_cast<HttpClient*>(ThreadData);
 
-		nlohmann::json inputJson = nlohmann::json::parse(InputJson);
+		nlohmann::json inputJson = nlohmann::json::parse(InputJson, nullptr, false);
+
+		if (inputJson.is_discarded()) {
+			return;
+		}
 
 		nlohmann::json requestJson = nlohmann::json::object();
 
 		requestJson["sessionId"] = client->threadSession;
-		requestJson["url"] = inputJson["url"];
 		
-		if (inputJson["cookies"].is_string()) {
-			nlohmann::json cookiesList = nlohmann::json::parse(inputJson["cookies"].get<std::string>());
+		if (inputJson.find("url") != inputJson.end()) {
+			requestJson["url"] = inputJson["url"];
+		}
+		else {
+			return;
+		}
+		
+		if (inputJson.find("cookies") != inputJson.end()) {
 
-			if (cookiesList.find("cookies") != cookiesList.end()) {
+			if (inputJson["cookies"].is_string()) {
+				nlohmann::json cookiesList = nlohmann::json::parse(inputJson["cookies"].get<std::string>(), nullptr, false);
 
-				if (cookiesList["cookies"].is_array()) {
-					for (auto& cookie : cookiesList["cookies"]) {
-						if (cookie.find("expires") != cookie.end()) {
-							if (cookie["expires"].is_string()) {
-								std::string expiresString = cookie["expires"];
-								std::time_t expiresTime = parseDateTime(expiresString);
+				if (cookiesList.is_discarded()) {
+					return;
+				}
 
-								cookie["expires"] = expiresTime;
+				if (cookiesList.find("cookies") != cookiesList.end()) {
+
+					if (cookiesList["cookies"].is_array()) {
+						for (auto& cookie : cookiesList["cookies"]) {
+							if (cookie.find("expires") != cookie.end()) {
+								if (cookie["expires"].is_string()) {
+									std::string expiresString = cookie["expires"];
+									std::time_t expiresTime = parseDateTime(expiresString);
+
+									cookie["expires"] = expiresTime;
+								}
 							}
 						}
-					}
 
-					requestJson["cookies"] = cookiesList["cookies"];
+						requestJson["cookies"] = cookiesList["cookies"];
+					}
 				}
 			}
+		}
+		else {
+			return;
 		}
 
 		DoRequest addCookiesToSession = reinterpret_cast<DoRequest>(GetProcAddress(library, "addCookiesToSession"));
@@ -368,7 +388,6 @@ extern "C" {
 			std::string headersStr = inputJson["headers"].get<std::string>() + "\r\n";
 
 			nlohmann::json& requestHeaders = requestJson["headers"];
-			//nlohmann::json& requestHeadersOrder = requestJson["headerOrder"];
 
 			std::vector<std::string> splitHeaders = split(headersStr, "\r\n");
 
@@ -478,10 +497,6 @@ extern "C" {
 				}
 			}
 
-			//for (auto& header : requestHeaders.items()) {
-			//	requestHeadersOrder.push_back(header.key());
-			//}
-
 
 			std::string updatedJsonString = requestJson.dump();
 
@@ -558,29 +573,37 @@ extern "C" {
 		HINSTANCE library = reinterpret_cast<HINSTANCE>(DllData);
 
 		if (library != NULL) {
-			nlohmann::json resJson = nlohmann::json::parse(client->lastResponse);
-			std::string inputJson = InputJson;
-			std::string body;
+			if (client->lastResponse.size() != 0) {
+				nlohmann::json resJson = nlohmann::json::parse(client->lastResponse);
+				std::string inputJson = InputJson;
+				std::string body;
 
-			if (resJson.find("body") != resJson.end()) {
-				body = resJson["body"].get<std::string>();
+				if (resJson.find("body") != resJson.end()) {
+					body = resJson["body"].get<std::string>();
 
-				if (inputJson == "true") {
-					if (body.find(";base64,") != std::string::npos) {
+					if (inputJson == "true") {
+						if (body.find(";base64,") != std::string::npos) {
 
-						std::string base64Body = splitString(body, ";base64,").at(1);
+							std::string base64Body = splitString(body, ";base64,").at(1);
 
-						std::vector<BYTE> decodeBase64Body = base64_decode(base64Body);
+							std::vector<BYTE> decodeBase64Body = base64_decode(base64Body);
 
-						body = std::string(decodeBase64Body.begin(), decodeBase64Body.end());
+							body = std::string(decodeBase64Body.begin(), decodeBase64Body.end());
+						}
 					}
 				}
+
+				char* res = body.data();
+				char* resMemory = AllocateSpace(static_cast<int>(strlen(res)), AllocateData);
+				memcpy(resMemory, res, strlen(res));
+			}
+			else {
+				const char* res = "null";
+
+				char* resMemory = AllocateSpace(static_cast<int>(strlen(res)), AllocateData);
+				memcpy(resMemory, res, strlen(res));
 			}
 
-			char* res = body.data();
-
-			char* resMemory = AllocateSpace(static_cast<int>(strlen(res)), AllocateData);
-			memcpy(resMemory, res, strlen(res));
 		}
 	}
 }
