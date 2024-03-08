@@ -211,7 +211,11 @@ extern "C" {
 	void SetProxy(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
 		HttpClient* client = static_cast<HttpClient*>(ThreadData);
 
-		nlohmann::json inputJson = nlohmann::json::parse(InputJson);
+		nlohmann::json inputJson = nlohmann::json::parse(InputJson, nullptr, false);
+
+		if (inputJson.is_discarded()) {
+			return;
+		}
 
 		if (inputJson.is_object()) {
 			std::string proxyText = getValueOrDefault(inputJson, "proxyText", "");
@@ -223,14 +227,32 @@ extern "C" {
 				return;
 			}
 
-			if (!proxyLogin.empty() && !proxyPassword.empty()) {
+			std::regex pattern1(R"(([\w-]+\.)+[\w-]+:\d+:\w+:\w+)");
+			std::regex pattern2(R"(\w+:\w+@([\w-]+\.)+[\w-]+:\d+)");
+
+			if (std::regex_match(proxyText, pattern1)) {
+				std::vector<std::string> splitProxyText = splitString(proxyText, ":");
+
+				proxyText = splitProxyText.at(0) + ":" + splitProxyText.at(1);
+				proxyLogin = splitProxyText.at(2);
+				proxyPassword = splitProxyText.at(3);
+
 				client->proxy = proxyType + "://" + proxyLogin + ":" + proxyPassword + "@" + proxyText;
 			}
-			else {
+			else if (std::regex_match(proxyText, pattern2)) {
 				client->proxy = proxyType + "://" + proxyText;
+			}
+			else {
+				if (!proxyLogin.empty() && !proxyPassword.empty()) {
+					client->proxy = proxyType + "://" + proxyLogin + ":" + proxyPassword + "@" + proxyText;
+				}
+				else {
+					client->proxy = proxyType + "://" + proxyText;
+				}
 			}
 
 		}
+
 	}
 
 	void SaveCookies(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
@@ -316,7 +338,6 @@ extern "C" {
 	void Request(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
 		HttpClient* client = static_cast<HttpClient*>(ThreadData);
 		HINSTANCE library = reinterpret_cast<HINSTANCE>(DllData);
-
 
 		if (library != NULL) {
 			nlohmann::json requestJson = nlohmann::json::parse(R"(
@@ -500,7 +521,17 @@ extern "C" {
 
 			std::string updatedJsonString = requestJson.dump();
 
+
 			DoRequest req = reinterpret_cast<DoRequest>(GetProcAddress(library, "request"));
+
+			if (*NeedToStop) {
+				MessageBoxA(NULL, "Need To Stop!", "", MB_OK);
+				return;
+			}
+			if (*WasError) {
+				MessageBoxA(NULL, "Was Error!", "", MB_OK);
+				return;
+			}
 
 			char* res = req(updatedJsonString.data());
 
@@ -516,6 +547,7 @@ extern "C" {
 			else {
 				client->lastHeadersStr = "{}";
 			}
+
 
 			// Add the Response to the container
 			addHttpData(requestJson.dump().data(), res);

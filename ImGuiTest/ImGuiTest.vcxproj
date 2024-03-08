@@ -73,7 +73,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)vendor\imgui\;$(ProjectDir)vendor\imgui\backends;$(IncludePath)</IncludePath>
-    <TargetName>anus</TargetName>
+    <TargetName>worker</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
