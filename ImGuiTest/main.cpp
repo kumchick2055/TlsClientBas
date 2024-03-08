@@ -227,7 +227,9 @@ extern "C" {
 				return;
 			}
 
+			// ip:port:username:password
 			std::regex pattern1(R"(([\w-]+\.)+[\w-]+:\d+:\w+:\w+)");
+			// username:password@ip:port
 			std::regex pattern2(R"(\w+:\w+@([\w-]+\.)+[\w-]+:\d+)");
 
 			if (std::regex_match(proxyText, pattern1)) {
