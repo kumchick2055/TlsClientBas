@@ -63,6 +63,11 @@
         
     ]    
     }) %>
+    
+    <div data-preserve="true" data-preserve-type="check" data-preserve-id="Check">
+        <input type="checkbox" id="Check" checked="checked"/> <label for="Check" class="tr">Random TLS Extension Order</label>    
+	</div>
+    
 </div>
 <div class="tooltipinternal">
 	<div class="tr tooltip-paragraph-first-fold">Выберите Браузер отпечаток которого вы хотите установить. Необходимо устанавливать перед выполнением первого запроса, иначе отпечаток не установится. Для решение этого нужно сбросить настройки Http Клиента.</div>

@@ -1,1 +1,0 @@
-native("tls_client", "SetFingerprint", <%= fingerprint %>);

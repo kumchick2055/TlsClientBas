@@ -17,6 +17,7 @@ struct HttpClient {
 	std::string clientIdentifier = "chrome_120";
 	std::string lastHeadersStr = "{}";
 	std::map<std::string, std::string> headers;
+	bool withRandomTlsExtensionOrder = true;
 	std::string proxy;
 	int status;
 	int timeout = 30;
@@ -91,7 +92,20 @@ extern "C" {
 	void SetFingerprint(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
 		HttpClient* client = static_cast<HttpClient*>(ThreadData);
 
-		client->clientIdentifier = InputJson;
+		nlohmann::json inputJson = nlohmann::json::parse(InputJson, nullptr, false);
+
+		if (inputJson.is_discarded()) {
+			return;
+		}
+
+		if(inputJson.find("fingerprint") != inputJson.end())
+			client->clientIdentifier = inputJson["fingerprint"];
+
+		if (inputJson.find("randomTlsExtension") != inputJson.end()) {
+			if (inputJson["randomTlsExtension"].is_boolean()) {
+				client->withRandomTlsExtensionOrder = inputJson["randomTlsExtension"];
+			}
+		}
 	}
 
 	void SetTimeout(char* InputJson, ResizeFunction AllocateSpace, void* AllocateData, void* DllData, void* ThreadData, unsigned int ThreadId, bool* NeedToStop, bool* WasError) {
@@ -351,7 +365,7 @@ extern "C" {
 					"withDefaultCookieJar": false,
 					"forceHttp1": false,
 					"withDebug": false,
-					"withRandomTLSExtensionOrder": true,
+					"withRandomTLSExtensionOrder": false,
 					"isByteResponse": false,
 					"isByteRequest": false,
 					"catchPanics": false,
@@ -402,6 +416,7 @@ extern "C" {
 			requestJson["sessionId"] = client->threadSession;
 			requestJson["timeoutSeconds"] = client->timeout;
 			requestJson["proxyUrl"] = client->proxy;
+			requestJson["withRandomTLSExtensionOrder"] = client->withRandomTlsExtensionOrder;
 
 			requestJson["requestUrl"] = inputJson["url"].get<std::string>();
 			requestJson["requestMethod"] = method;

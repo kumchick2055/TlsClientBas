@@ -6,9 +6,8 @@ native_async("tls_client", "Request", JSON.stringify({
     "method": (<%= Method %>)
 }))!
 
-
 parsedResponse = JSON.parse(_result());
 
 if(parsedResponse["status"] < 200){
-	fail("[TLS Client] Error: " + parsedResponse["body"]);
+    fail(_errorPrefix + " Error: " + parsedResponse["body"]);
 }

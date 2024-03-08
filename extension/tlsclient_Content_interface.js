@@ -1,9 +1,18 @@
 <div class="container-fluid">
-	<%= _.template($('#variable_constructor').html())({id:"Save", description:tr("Variable To Save"), default_variable: "SAVED_CONTENT", help: {description: tr("This variable will contain responce text without headers after action will end.")}}) %>
     
-    <div data-preserve="true" data-preserve-type="decodeBase64" data-preserve-id="Decode">
-        <input type="checkbox" id="Decode" checked="checked"/> <label for="Decode" class="tr">Decode Base64</label>
+	<%= _.template($('#variable_constructor').html())({
+        id:"Save",
+        description:tr("Variable To Save"), 
+        default_variable: "SAVED_CONTENT", 
+        help: {
+            description: tr("This variable will contain responce text without headers after action will end.")
+        }
+    }) %>
+
+    <div data-preserve="true" data-preserve-type="check" data-preserve-id="Check">
+        <input type="checkbox" id="Check" checked="checked"/> <label for="Check" class="tr">Decode Base64</label>    
 	</div>
+    
 </div>
 <div class="tooltipinternal">
 	<div class="tr tooltip-paragraph-first-fold">Get page source of the last request of http client.</div>

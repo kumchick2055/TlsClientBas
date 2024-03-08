@@ -1,5 +1,5 @@
 var Save = this.$el.find("#Save").val().toUpperCase();
-var Decode = $("#Decode").is(':checked');
+var Decode = $("#Check").is(':checked');
 
 if(Save.length == 0){
 	Invalid(tr("The variable to which the result is saved is missing"));
