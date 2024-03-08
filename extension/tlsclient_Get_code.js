@@ -9,5 +9,5 @@ native_async("tls_client", "Request", JSON.stringify({
 parsedResponse = JSON.parse(_result());
 
 if(parsedResponse["status"] < 200){
-    fail(_errorPrefix + " Error: " + parsedResponse["body"]);
+    fail("[TlsClient] Error: " + parsedResponse["body"]);
 }
