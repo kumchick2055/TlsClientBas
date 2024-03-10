@@ -332,6 +332,9 @@ extern "C" {
 
 									cookie["expires"] = expiresTime;
 								}
+								if (cookie["expires"].is_number_float()) {
+									cookie["expires"] = static_cast<int>(cookie["expires"].get<float>());
+								}
 							}
 						}
 
