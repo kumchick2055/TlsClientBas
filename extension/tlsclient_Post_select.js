@@ -18,6 +18,13 @@ var PostDataArray = GetInputConstructorValue("PostDataArray", loader);
 var Headers = GetInputConstructorValue("Headers", loader);
 var PostDataRaw = GetInputConstructorValue("PostDataRaw", loader);
 var ContentTypeRaw = GetInputConstructorValue("ContentTypeRaw", loader);
+
+var MaximumFailes = GetInputConstructorValue("MaximumFailes", loader);
+if(MaximumFailes["original"].length == 0){
+	Invalid(tr("Maximum failures") + " " + tr("is empty"));
+    return;
+};
+
 var Redirect = $("#Check").is(':checked');
 
 try{
@@ -30,7 +37,8 @@ try{
         ContentTypeRaw: ContentTypeRaw["updated"],
         Params: "[" + PostDataArray["updated"] + "]",
         Headers: Headers["updated"],
-        Redirect: Redirect
+        Redirect: Redirect,
+        MaximumFailes: MaximumFailes["updated"]
     })
 	code = Normalize(code, 0);
 	BrowserAutomationStudio_Append("", BrowserAutomationStudio_SaveControls() + code, action, DisableIfAdd);

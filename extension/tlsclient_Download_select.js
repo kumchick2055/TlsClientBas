@@ -8,11 +8,18 @@ if(File["original"].length <= 0){
 	Invalid(tr("File Path") + " " + tr("is empty"));
 	return;
 };
+var MaximumFailes = GetInputConstructorValue("MaximumFailes", loader);
+if(MaximumFailes["original"].length == 0){
+	Invalid(tr("Maximum failures") + " " + tr("is empty"));
+    return;
+};
+
 
 try{
 	var code = loader.GetAdditionalData() + _.template($("#tlsclient_Download_code").html())({
 		Value: Value["updated"],
 		File: File["updated"],
+        MaximumFailes: MaximumFailes["updated"]
 	})
 	code = Normalize(code, 0)
 	BrowserAutomationStudio_Append("", BrowserAutomationStudio_SaveControls() + code, action, DisableIfAdd);

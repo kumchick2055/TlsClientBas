@@ -70,7 +70,9 @@
     
 </div>
 <div class="tooltipinternal">
-	<div class="tr tooltip-paragraph-first-fold">Выберите Браузер отпечаток которого вы хотите установить. Необходимо устанавливать перед выполнением первого запроса, иначе отпечаток не установится. Для решение этого нужно сбросить настройки Http Клиента.</div>
+	<div class="tr tooltip-paragraph-first-fold">TlsClient settings are applied only before the first request or after the client is reset.!!!</div>
+    <div class="tr tooltip-paragraph-fold">Fingerprint - Select that fingerprint, ClientHello which should be similar to requests from other software</div>
+    <div class="tr tooltip-paragraph-last-fold">Random TLS Extension Order - Do I need to change the order of TLS extensions?</div>
 </div>
 
 <%= _.template($('#back').html())({action:"executeandadd", visible:true}) %>

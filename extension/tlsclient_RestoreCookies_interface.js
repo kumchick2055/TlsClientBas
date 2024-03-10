@@ -4,6 +4,12 @@
         description:tr("URL"), 
         default_selector: "string", 
         disable_int:true, 
+        help: {
+            description: tr("Set specified cookies for a given site"), 
+            examples:[
+                {code:"URL",description:tr("http:// or https:// is required!\r\nURL for which to set cookies")},
+            ]
+       }
     }) %>
 	<%= _.template($('#input_constructor').html())({
         id:"Value", 

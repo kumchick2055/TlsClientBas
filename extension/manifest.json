@@ -303,11 +303,18 @@
 		"Is byte response": {"ru": "Сохранить в base64 формате"},
         "Get specified cookies for a given site": {"ru": "Получить куки для заданного сайта"},
         "http:// or https:// is required!\r\nURL for which we receive cookies": {"ru": "http:// или https:// обязятелен!\r\nСсылка для которой получаем куки"},
+        "Set specified cookies for a given site": {"ru": "Загрузить куки для заданного сайта"},
+        "http:// or https:// is required!\r\nURL for which to set cookies": {"ru": "http:// или https:// обязятелен!\r\nСсылка для которой ставим куки"},
         "Decode Base64": {"ru": "Декодировать Base64"},
-        "Random TLS Extension Order": {"ru": "Менять порядок TLS Расширений"}
+        "Random TLS Extension Order": {"ru": "Менять порядок TLS Расширений"},
+        "Maximum failures": {"ru":"Максимум неудач"},
+        "Random TLS Extension Order - Do I need to change the order of TLS extensions?": {"ru": "Менять порядок TLS Расширений - Нужно ли менять порядок ТЛС расширений?"},
+        "Fingerprint - Select that fingerprint, ClientHello which should be similar to requests from other software": {"ru": "Отпечаток выберите тот отпечаток пальца ClientHello, который должен быть похож на запросы от другого программного обеспечения."},
+        "TlsClient settings are applied only before the first request or after the client is reset.!!!": {"ru": "Настройки TlsClient применяются только до первого запроса или после сброса клиента.!!!"},
+        "The maximum number of failed requests after which the action will be completed with an error.": {"ru":"Максимальное количество неудачных запросов после которого действие будет завершено с ошибкой."}
 	},
 	"major_version": 1,
-	"minor_version": 1,
+	"minor_version": 2,
 	"modules": [],
 	"name": "TlsClient",
 	"dll": [

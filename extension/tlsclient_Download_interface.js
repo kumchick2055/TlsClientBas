@@ -15,6 +15,20 @@
         help: {description: tr("A path to file which will be downloaded. If file exists, it will be overwritten. Putting here resource with type 'LinesFromFile' is almost always a bad idea, because resource will be converted to line from selected file, not to file name. If you want to get file name from resource, please use 'Resource Location' action and put result here."), examples:[{code:"c:/downloads/pic.png"},{code:"c:\\downloads\\pic.png"}]}
     }) %>
     
+    <%= _.template($('#input_constructor').html())({
+        id:"MaximumFailes",
+        description:tr("Maximum failures"), 
+        default_selector: "int",
+        disable_string:true, 
+        value_number: 3,
+        min_number:1,
+        max_number:999999, 
+        help: {
+            description: tr("The maximum number of failed requests after which the action will be completed with an error.")
+        } 
+    }) %>
+    
+    
 </div>
 <div class="tooltipinternal">
 	<div class="tr tooltip-paragraph-first-fold">Download selected url and save response to file.</div>

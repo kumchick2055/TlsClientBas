@@ -155,6 +155,19 @@
         help: {description: tr("Request method, you can put any string here.")}
     }) %>
     
+    <%= _.template($('#input_constructor').html())({
+        id:"MaximumFailes",
+        description:tr("Maximum failures"), 
+        default_selector: "int",
+        disable_string:true, 
+        value_number: 3,
+        min_number:1,
+        max_number:999999, 
+        help: {
+            description: tr("The maximum number of failed requests after which the action will be completed with an error.")
+        } 
+    }) %>
+    
 <div data-preserve="true" data-preserve-type="check" data-preserve-id="Check">
 		<input type="checkbox" id="Check" checked="checked"/> <label for="Check" class="tr">Follow redirects</label>
 	</div>

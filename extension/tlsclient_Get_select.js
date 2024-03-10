@@ -9,6 +9,12 @@ if(Method["original"].length <= 0){
 	Invalid(tr("Method") + " " + tr("is empty"));
     return;
 };
+var MaximumFailes = GetInputConstructorValue("MaximumFailes", loader);
+if(MaximumFailes["original"].length == 0){
+	Invalid(tr("Maximum failures") + " " + tr("is empty"));
+    return;
+};
+
 
 var Redirect = $("#Check").is(':checked');
 
@@ -18,6 +24,7 @@ try {
 		Headers: Headers["updated"],
 		Method: Method["updated"],
 		Redirect: Redirect,
+        MaximumFailes: MaximumFailes["updated"]
     })
 	code = Normalize(code, 0);
 	BrowserAutomationStudio_Append("", BrowserAutomationStudio_SaveControls() + code, action, DisableIfAdd);

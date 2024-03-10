@@ -7,8 +7,8 @@
         help: {
             description: tr("Get specified cookies for a given site"), 
             examples:[
-            {code:"URL",description:tr("http:// or https:// is required!\r\nURL for which we receive cookies")},
-           ]
+                {code:"URL",description:tr("http:// or https:// is required!\r\nURL for which we receive cookies")},
+            ]
        }
     }) %>
 	<%= _.template($('#variable_constructor').html())({
