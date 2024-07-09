@@ -1,5 +1,9 @@
+Репозиторий переехал, этим больше не занимаюсь - https://github.com/kumchick2055/TlsClientBasGo
+
 # ImGuiTest
 *Случайно назвал папку не так как нужно, теперь это ImgGuiTest)*
+
+
 
 #
 Модуль является обёрткой над Golang библиотекой https://github.com/bogdanfinn/tls-client
